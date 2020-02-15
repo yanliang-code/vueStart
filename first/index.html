@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .item{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        {{ msg }}
+        <div>
+            <!-- 通过v-model进行数据与视图的双向绑定，无论哪一方变换，另一方会自动同步 -->
+            <input type="text" v-model="info" />
+            <!-- 
+                此处handleClick需要在实例中定义，若不定义，会报错
+                被绑定的函数例如handleClick，会在实例中寻找，寻找不到返回undefined
+            -->
+            <input type="button" @click="handleClick" value="添加" />
+            <ul>
+                <!-- 若想在html中显示遍历的目标值，使用插值表达式 -->
+                <!-- <li v-for="item in list">{{ item }}</li> -->
+                <!-- 组件写法
+                    循环组件，通过父页面给子组件传值
+                -->
+                <todo-item v-for="item in list" :item="item"></todo-item>
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 将参数二渲染出的组件命名为todo-item的全局组件
+        Vue.component('todo-item', {
+            // html模板(模板中使用的变量)
+            // 缺点：模板没有高亮，由于是字符串拼接
+            // item类选择器是全局的
+            template:'<li class="item">{{ item }}</li>',
+            // 此处使用最简单的props收值方式：数组
+            props:['item']
+        })
+        new Vue({
+            el:'#app', //挂载位置
+            data(){
+                return{
+                    msg:'hello vue',
+                    info:'',
+                    list:[]
+                }
+            },
+            // methods需要加s
+            methods:{
+                handleClick(){
+                    console.log(this.info);
+                    // 将目标值添加到列表中
+                    this.list.push(this.info);
+                    // 将输入框对应的值清空，v-model同步将视图改变
+                    this.info =""
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
+
+<!-- 
+    知识点：
+        绑定事件：@
+        父组件给子组件传值
+        全局组件的定义
+    
+    Vue.component缺点：
+        全局定义：强制要求每个component中的命名不能重复
+        字符串模板：缺乏语法高亮，在HTML多行时，需要用到丑陋的\
+        不支持CSS：意味着当HTML和JavaScript组件化时，CSS明显被遗漏（只能在父组件获取全局定义）
+        没有构建步骤：限制只能使用HTML和ES5 JavaScript，而不能使用预处理器，如Pug和Babel
+ -->

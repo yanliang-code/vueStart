@@ -1,0 +1,26 @@
+
+1、template（目前vue使用的template模板）
+    模板语法（HTML的扩展）
+    数据绑定使用Mustache语法（双大括号==>插值表达式）
+
+2、JSX（react使用的JSX，vue通过插件也可以使用）
+    JavaScript的语法扩展
+    数据绑定使用单引号
+
+template：
+    优点：
+        学习成本低
+        大量内置指令（语法糖）简化开发
+        组件作用域CSS
+    缺点：
+        灵活性低
+JSX:
+    优点：
+        灵活性高
+
+总结：
+    template与jsx最终都会编译成createElement("标签", "标签内容");
+
+
+问题：
+    将1.1章节的Demo改成JSX形式

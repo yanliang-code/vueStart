@@ -1,0 +1,17 @@
+
+经常使用template，会经常使用指令；若使用render函数或jsx，指令就不常用
+
+l、vue内置指令（ E:\geektime-vue-1-master\演示DEMO源码\src\views\1.7\Directives.vue ）
+    v-text、v-html、v-show、v-if、v-else、v-else-if、v-for、
+    v-on、v-bind、v-model、v-slot、v-pre、v-cloak、v-once
+
+指令其实就是语法糖，在把template模板编译成render函数时，会将指令编译成js代码
+jsx也是语法糖，不过现在不支持太多指令，后续会支持更多指令写法
+
+
+2、自定义指令（E:\geektime-vue-1-master\演示DEMO源码\src\views\1.7\CustomerDirectives.vue）
+    通过关键字directives：{}内声明自定义指令
+
+
+问题：
+    查看组件生命周期和指令周期钩子的运行顺序

@@ -1,0 +1,20 @@
+单文件写法
+    my-app/public/index.html是页面模板，也是整个单页面的最外层  
+    main.js是程序入口，内部会将App.vue引入，作为根组件。此外，通过创建Vue实例将根组件挂载到
+    index.html内指定位置，最终呈现的是index中指定位置展示App文件的内容(App内也有可能引用其他文件)
+
+将first文件夹中的todolist移植到second文件夹中，比较他们的写法区别
+
+cli的优势：
+    语法高亮
+    错误提示
+    热更新
+
+
+npm install -g @vue/cli
+vue create my-app
+cd my-app
+npm run serve
+
+
+npm install  将package.json中的依赖包下载到本地存在node_modules文件夹内

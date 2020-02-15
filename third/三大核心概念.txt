@@ -1,0 +1,35 @@
+组件：小型独立的一个个UI模块
+页面：由多个组件拼接而成
+三大核心概念
+    一、属性
+            自定义属性 props
+                组件props中声明的属性，父组件给子组件传值
+            原生属性 attrs
+                没有声明的属性，默认自动挂载到组件根元素上，设置inheritAttrs为false可关闭自动挂载
+            特殊属性 class、style
+                挂载到组件根元素上，支持字符串、对象数组等多种语法(最终会合并为字符串，挂载到真实的dom元素上)
+            注意：根元素应该是html元素
+    二、事件
+            普通事件
+                @click @input @change @xxx等事件，通过this.$emit('xxx', ...)触发
+            修饰符事件
+                @input.trim @click.stop @submit.prevent等，一般用于原生HTML元素，自定义组件需要自行开发支持
+                .stop事件阻止冒泡，多个子元素需要点击事件时，每个子元素点击有自己的处理逻辑，还有共同的逻辑，
+                共同逻辑可以通过在父元素加上点击事件，通过事件冒泡的形式触发。若子元素不需要触发父元素的事件，
+                可加上stop修饰符，获取在子元素的点击事件上加e.stopPropagation()
+    三、插槽（2.0以后不严格区分两类插槽的概念，底层实现趋向相同，建议使用2.6新语法编码）
+            普通插槽
+                <template slot="xxx">....</template>(旧语法)
+                <template v-slot:xxx>....</template>(2.6新语法)
+            作用域插槽(可通过子组件传递给父组件属性)
+                <template slot="xxx" slot-scope="props">...</template>(旧语法)
+                <template v-slot:xxx="props">...</template>(2.6新语法)
+            注意：
+                子组件通过<slot name="xxx" />决定父组件传递html模板在子组件的位置
+                子组件通过<slot name="item" v-bind="{value:'vue'}" />决定父组件中
+                插槽slot属性值为vue的模板在子组件中的位置，子组件通过v-bind将指定
+                值传递给父组件slot-scope或v-slot:xxx对应的变量
+
+总结：
+    三大核心概念：属性、事件、插槽都可以归为属性（大属性）
+    都可以基于简单的属性传递来实现

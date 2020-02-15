@@ -1,0 +1,21 @@
+
+l、计算属性computed （E:\geektime-vue-1-master\演示DEMO源码\src\views\1.5\Computed.vue 普通函数与computed的对比）
+    减少模板中计算逻辑
+    数据缓存
+    依赖固定的数据类型（响应式数据）
+
+2、侦听器watch （E:\geektime-vue-1-master\演示DEMO源码\src\views\1.5\Watch.vue watch的多种写法）
+    更加灵活、通用
+    watch中可以执行任意逻辑，如函数节流，Ajax异步获取数据，甚至操作DOM
+
+总结：
+    computed能做的，watch都能做；反之则不行
+    能用computed的尽量使用computed
+
+问题：
+    对watchl Demo 进行防抖改造，
+    即直到用户停止输入超过500毫秒后，才更新fullName
+    
+思路：
+    触发监听后，判断延迟500毫秒的定时器是否存在，存在清除；再次开启延迟500毫秒的定时器
+    定时器内容就是真正的逻辑
