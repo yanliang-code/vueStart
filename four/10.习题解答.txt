@@ -1,6 +1,17 @@
-1.vue如何监控到子组件修改父组件的值并给出警告？
+1.vue 子组件为何不可以修改父组件传递的值？
+    因为vue设计是单向数据流，数据的流动方向只能是自上往下的方向
+vue如何监控到子组件修改父组件的值并给出警告？
+    代码:D:\coding\vueStart\演示DEMO源码\src\views\1.4\Proxy.js
+    主要:给子组件接受的值进行代理包裹,代理包裹内部使用的Object.defineProperty
     通过Object.defineProperty(a, b, c) c上对应set、get方法，当组件内给a赋值时，会先调用set方法
     set方法通过判断vue内部的标志量，判断是否通过父或子组件修改值，并决定是否给出警告
+    注：a为对象，b为对象中的属性，c为对象，对象内有set、get两个属性，分别对应函数
+
+    父组件修改子组件的变量值:
+        1、props
+        2、ref
+        3、vuex
+        4、event bus
 
 2.this.$emit的返回值是什么？
     返回值为this(组件自身实例)
@@ -19,3 +30,65 @@
     父组件将检验方法和提示信息通过props传递给子组件，子组件监听到手机号变换，调用校验函数进行
     校验，根据校验结果决定是否显示提示信息
     代码：E:\vueStart\third\my-app\src\view\first\index.vue
+
+5.为什么不能用index作为key？
+    更新DOM性能问题
+    会引入状态Bug问题（代码：D:\coding\vueStart\third\my-app\src\view\third\index.vue）
+
+    引入key是为了diff算法能够更快的区分相同的组件，避免按个去更新属性，浪费性能
+
+    不要使用动态变化的值作为key，要使用静态值作为key；若每次所有的key值都不同，vue底层会将所有的组件挨个更新，若有部分
+    key相同，则为节省性能这部分就不做处理，此处使用动态变化值作为key，可能你认为不需要更新的组件，由于他们的key不同进行
+    了更新
+
+6.数组有哪些方法支持响应式更新，如不支持如何处理，底层原理如何实现的？
+    支持：unshift、shift、push、pop、splice、sort、reverse
+    不支持：filter、concat、slice（不支持可以获取到结果值，直接将其复制给需要响应式更新的变量）
+           利用索引直接设置一个数组项时，例如：vm.items[index] = newValue
+           修改数组的长度时，例如：vm.items.length = newLength
+    原理同样是使用Object.defineProperty对数组方法进行改写（加代理层）
+    可以console打印vue数组和js数组看一下区别，vue数组增加了__ob__属性以及多一层原型
+
+7.对watch1 Demo 进行防抖改造,即知道用户停止输入超过500毫秒后,才更新fullName
+    setTimeOut
+    lodash debounce
+    代码：D:\coding\vueStart\演示DEMO源码\src\views\1.5\Watch1_pro.vue
+    // func 函数    delay 延迟时间
+    export function debounce(func, delay) {
+        let timer
+        return function (...args) {
+            if (timer) {
+            clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+            func.apply(this, args)
+            }, delay)
+        }
+    }
+
+8.设计一个秒杀倒计时的组件
+    排除用户本地时间的干扰,采用获取服务器时间,
+    npm install moment --save  js时间的工具方法
+    代码：D:\coding\vueStart\third\my-app\src\view\four\index.vue
+    实现思路：首先不能用本地时间倒计时，不可控。获取服务器时间，通过与当前本地时间计算差值。通过定时调用更新数据状态的函数
+             来控制页面显示效果与定时器的开关。被调用的函数内容为获取当前本地时间，通过与差值计算出当前服务器时间，最后与
+             父组件传入的秒杀开始时间与结束时间的比较，给相应的响应式数据赋值
+
+9.查看组件生命周期和指令生命周期钩子的运行顺序
+    组件生命周期代码：D:\coding\vueStart\third\period
+    一些应用钩子函数的想法:
+        1.在created钩子中可以对data数据进行操作，这个时候可以进行ajax请求将返回的数据赋给data。
+        2.虽然updated函数会在数据变化时被触发，但却不能准确的判断是那个属性值被改变，所以在实际情况中用computed或match函数来监听属性的变化，并做一些其他的操作。
+        3.在mounted钩子对挂载的dom进行操作，此时，DOM已经被渲染到页面上。
+        4.在使用vue-router时有时需要使用<keep-alive></keep-alive>来缓存组件状态，这个时候created钩子就不会被重复调用了，如果我们的子组件需要在每次加载或切换状态的时候进行某些操作，可以使用activated钩子触发。
+        5.所有的生命周期钩子自动绑定 this 上下文到实例中，所以不能使用箭头函数来定义一个生命周期方法 (例如 created: () => this.fetchTodos())。这是导致this指向父级。
+
+
+10.使用2.6最新的API Vue.observable优化响应式provide
+    代码：D:\coding\vueStart\演示DEMO源码\src\views\1.8\ChildrenA_a.vue
+
+11.v-ant-ref指令回调中能否更改其响应式数据？为什么？
+    不能,会导致死循环
+    因为,组件更新重新渲染就会执行回调,若再回调中继续修改响应式数据,会再次出发组件渲染,接着触发回调.(死循环)
+
+12.将1.1章节的Demo改成JSX形式

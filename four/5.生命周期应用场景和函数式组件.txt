@@ -5,22 +5,21 @@
 一、创建阶段（执行一次）
     beforeCreate前：初始化事件、生命周期
     create前：数据观测、属性（响应式数据）、侦听器配置等
-    beforeMount前：模板template编译成render（若直接写render函数，则可省略）
-    render中：生成虚拟dom，
+    beforeMount前：模板template编译成render（若直接写render函数，则可省略）（调用render函数，生成虚拟dom）
     mounted前：挂载到指定位置
     mounted中：异步请求、操作dom、定时器等（此时不保证子组件的虚拟dom已经挂载上，操作dom放在$nextTick内，等待回调）
 
 二、更新阶段（执行多次）
     beforeUpdate前：依赖数据改变或者调用this.$forceUpdate强制刷新会触发此函数
     beforeUpdate中：移除已经添加的事件监听器等 万万不可修改依赖数据（一般不会用到此函数处理）
-    render中：生成虚拟dom，比对新旧dom，进行更新dom
+    updated前：调用render函数生成虚拟dom，比对新旧dom，进行更新dom
     updated中：异步请求、操作dom、定时器等 万万不可修改依赖数据（不保证子组件dom已经挂载上）
 
 注意：在更新阶段万万不可修改依赖数据，一旦修改会触发更新，造成死循环直到浏览器爆炸
 
 三、销毁阶段（执行一次）
-    beforeDestory：移除已经添加的事件监听器、计时器等
-    destory：很少使用，beforeDestory可以满足使用
+    beforeDestory中：移除已经添加的事件监听器、计时器等（实例销毁之前调用。在这一步，实例仍然完全可用。）
+    destory中：很少使用，beforeDestory可以满足使用（Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。）
 
 
 代码：E:\geektime-vue-1-master\演示DEMO源码\src\views\1.6\index.vue

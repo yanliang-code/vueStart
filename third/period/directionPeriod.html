@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>测试指令生命周期</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+      .test,
+      .test1 {
+        border: 1px solid black;
+        text-align: center;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div v-move v-if="numberTestShow">Not:{{ numberTest }}</div>
+      <!-- 测试子组件（此元素内没有响应式变量） -->
+      <direct-test></direct-test>
+      <!-- 子组件 -->
+      <direct v-if="componentShow">
+        <div class="test" v-focus v-if="show">{{ num }}</div>
+      </direct>
+     <!-- 
+         同级组件，它们间的生命周期前后执行顺序，从上到下，依次执行beforeCreate、created、beforeMount，
+         再执行下个同级组件的这些生命周期
+         mounted也如此（同级都是从上到下）
+      -->
+      <button @click="numberTestShow = !numberTestShow">不在组件内Toggle</button>
+      <button @click="numberTest++">不在组件内的更新</button>
+      <br />
+      <button @click="num++">更新</button>
+      <button @click="show = !show">Toggle</button>
+      <button @click="componentShow = !componentShow">子组件Toggle</button>
+    </div>
+    <script>
+      Vue.directive("focus", {
+        inserted: function(el) {
+          console.log("focus指令 insert", el.innerText);
+          el.focus();
+        },
+        bind: function(el) {
+          console.log("focus指令 bind", el.innerText);
+        },
+        update: function(el) {
+          console.log("focus指令 update", el.innerText);
+        },
+        componentUpdated: function(el) {
+          console.log("focus指令 componentUpdated", el.innerText);
+        },
+        unbind: function(el) {
+          console.log("focus指令 unbind", el.innerText);
+        }
+      });
+    // 指令的生命周期在组件生命周期夹缝中执行
+    // beforeMount -> bind -> inserted -> mounted
+    // beforeUpdate -> update -> componentUpdated -> updated
+    // beforeUpdate -> unbind -> updated
+      Vue.directive("move", {
+        // inserted：被绑定元素插入父节点时调用。相当于mounted，
+        // 元素被渲染时触发，比mounted完成的早。（先确定mounted位置即可，在其前面）
+        inserted: function(el) {
+          console.log("move指令 insert", el.innerText);
+          el.focus();
+        },
+        // bind：只调用一次，指令第一次绑定到元素时调用。相当于beforeMount，
+        // 在自定义指令创建的时候触发，但是比组件的beforeMount开始的晚。（先确定beforeMount位置即可，在其后面）
+        bind: function(el) {
+          console.log("move指令 bind", el.innerText);
+        },
+        // update：所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。指令的值可能发生了改变，也可能没有。
+        update: function(el) {
+          console.log("move指令 update", el.innerText);
+        },
+        // update和componentUpdated关系：相当于beforeUpdated和updated
+        componentUpdated: function(el) {
+          console.log("move指令 componentUpdated", el.innerText);
+        },
+        // unbind：只调用一次，指令与元素解绑时调用。相当于destroyed，比destroyed完成的早。
+        // 一般都在在组件beforeUpdate、updated之间执行
+        unbind: function(el) {
+          console.log("move指令 unbind", el.innerText);
+        }
+      });
+        // 同级子组件按先后顺序触发beforeCreate、Created、beforeMount
+        // 父组件在执行beforeMount后先触发direct-test子组件的三个阶段，后触发direct子组件的三个阶段
+        // 之后在direct的mounted执行完 -> direct-test -> 父组件
+      Vue.component("direct", {
+        template: `
+          <div><slot></slot></div>
+        `,
+        beforeCreate() {
+          console.log("子组件 beforeCreate");
+        },
+        created() {
+          console.log("子组件 created");
+        },
+        beforeMount: function() {
+          console.log("子组件 beforeMount");
+        },
+        mounted() {
+          console.log("子组件 mounted");
+        },
+        beforeUpdate() {
+          console.log("子组件 beforeUpdate");
+        },
+        updated() {
+          console.log("子组件 updated");
+        },
+        beforeDestroy() {
+          console.log("子组件 beforeDestroy");
+        },
+        destroyed() {
+          console.log("子组件 destroped");
+        }
+      });
+      Vue.component("direct-test", {
+        template: `
+          <div><slot></slot></div>
+        `,
+        beforeCreate() {
+          console.log("测试子组件 beforeCreate");
+        },
+        created() {
+          console.log("测试子组件 created");
+        },
+        beforeMount: function() {
+          console.log("测试子组件 beforeMount");
+        },
+        mounted() {
+          console.log("测试子组件 mounted");
+        },
+        beforeUpdate() {
+          console.log("测试子组件 beforeUpdate");
+        },
+        updated() {
+          console.log("测试子组件 updated");
+        },
+        beforeDestroy() {
+          console.log("测试子组件 beforeDestroy");
+        },
+        destroyed() {
+          console.log("测试子组件 destroped");
+        }
+      });
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          num: 100,
+          numberTest: 100,
+          numberTestShow: true,
+          show: true,
+          componentShow: true
+        },
+        beforeCreate() {
+          console.log("根组件 beforeCreate");
+        },
+        created() {
+          console.log("根组件 created");
+        },
+        beforeMount: function() {
+          console.log("根组件 beforeMount");
+        },
+        mounted() {
+          console.log("根组件 mounted");
+        },
+        beforeUpdate() {
+          console.log("根组件 beforeUpdate");
+        },
+        updated() {
+          console.log("根组件 updated");
+        },
+        beforeDestroy() {
+          console.log("根组件 beforeDestroy");
+        },
+        destroyed() {
+          console.log("根组件 destroped");
+        }
+      });
+    </script>
+  </body>
+</html>

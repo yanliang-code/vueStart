@@ -1,0 +1,55 @@
+
+1.
+
+2.点击：不在组件内Toggle
+    directionPeriod.html:163 根组件 beforeUpdate
+    directionPeriod.html:77 move指令 unbind Not:100
+    directionPeriod.html:100 子组件 beforeUpdate
+    directionPeriod.html:49 focus指令 update 100
+    directionPeriod.html:52 focus指令 componentUpdated 100
+    directionPeriod.html:103 子组件 updated
+    directionPeriod.html:166 根组件 updated
+3.点击：不在组件内的更新
+    directionPeriod.html:163 根组件 beforeUpdate
+    directionPeriod.html:71 move指令 update Not:102
+    directionPeriod.html:74 move指令 componentUpdated Not:103
+    directionPeriod.html:100 子组件 beforeUpdate
+    directionPeriod.html:49 focus指令 update 100
+    directionPeriod.html:52 focus指令 componentUpdated 100
+    directionPeriod.html:103 子组件 updated
+    directionPeriod.html:166 根组件 updated
+4.点击：更新
+    directionPeriod.html:163 根组件 beforeUpdate
+    directionPeriod.html:71 move指令 update Not:103
+    directionPeriod.html:74 move指令 componentUpdated Not:103
+    directionPeriod.html:100 子组件 beforeUpdate
+    directionPeriod.html:49 focus指令 update 100
+    directionPeriod.html:52 focus指令 componentUpdated 101
+    directionPeriod.html:103 子组件 updated
+    directionPeriod.html:166 根组件 updated
+5.点击：Toggle
+    directionPeriod.html:163 根组件 beforeUpdate
+    directionPeriod.html:71 move指令 update Not:103
+    directionPeriod.html:74 move指令 componentUpdated Not:103
+    directionPeriod.html:100 子组件 beforeUpdate
+    directionPeriod.html:55 focus指令 unbind 101
+    directionPeriod.html:103 子组件 updated
+    directionPeriod.html:166 根组件 updated
+6.点击：子组件Toggle
+    directionPeriod.html:170 根组件 beforeUpdate
+    directionPeriod.html:75 move指令 update Not:100
+    directionPeriod.html:79 move指令 componentUpdated Not:100
+    directionPeriod.html:113 子组件 beforeDestroy （父组件发现自己模板变化，子组件需要销毁，所以子组件执行触发beforeDestroy事件）
+    directionPeriod.html:54 focus指令 unbind 100
+    directionPeriod.html:116 子组件 destroped
+    directionPeriod.html:173 根组件 updated
+
+总结：
+1.updated和mounted父子组件情况下，都是由内向外扩散
+2.updated和mounted同级组件情况下，都是由按执行顺序扩散
+3.比组件的声明周期函数晚的是因为要先触发组件的生命周期函数才可以引发指令的钩子函数
+    例如：bind晚于beforeMount
+4.比组件的声明周期函数早的是因为指令所绑定的元素也是组件内容的一部分，只有内容全部完成了组件才算完成。
+    例如：inserted早于mounted，unbind早于destroped
+5.每次指令的更新都会引起根组件的beforeUpdate，根组件的更新会引起子组件内部自定义指定的update，
+  子组件内部自定义指令的update会引起子组件的beforeUpdate。
