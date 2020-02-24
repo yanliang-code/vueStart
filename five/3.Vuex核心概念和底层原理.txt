@@ -1,0 +1,13 @@
+一、核心概念
+    State -- this.$store.state.xxx 取值
+    Getter -- this.$store.getters.xxx 取值
+    Mutation -- this.$store.commit('xxx') 赋值
+    Action -- this.$store.dispatch('xxx') 赋值
+    Module 模块化，进一步进行组织管理
+
+二、底层管理
+    State：提供一个响应式数据
+    Getter：借助Vue的计算属性computed来实现缓存
+    Mutation：更改state方法
+    Action：触发Mutation方法
+    Module：Vue.set动态添加state到响应式数据中

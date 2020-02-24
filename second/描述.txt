@@ -10,8 +10,8 @@ cli的优势：
     错误提示
     热更新
 
-
-npm install -g @vue/cli
-vue create my-app
-cd my-app
-npm run serve
+使用脚手架创建工程
+npm install -g @vue/cli (安装3.0版本脚手架，已安装可忽略此步骤)
+vue create my-app （创建工程）
+cd my-app （进入工程目录）
+npm run serve （启动工程）

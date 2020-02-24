@@ -1,0 +1,33 @@
+1.Vuex是通过什么方式提供响应式数据的？
+    new Vue({})
+    代码：D:\coding\vueStart\five\vuex-demo2\src\mini-vuex.js
+
+2.$store是如何挂载到实例this上的？
+    代码：D:\coding\vueStart\five\vuex-demo2_a
+    扩展简化版的min-vuex，实现getters，并实现Vuex的方式注入$store
+        计算属性computed实现getters缓存
+        beforeCreate中混入$store的获取方式
+
+3.扩展购物车示例,提供单次添加1-N的数量到购物车的功能
+    通过监听存储所有产品的变量，变化后遍历取出id，将id作为属性，值为1存储在指定对象中，下拉选v-model指定对象
+    中id对应的值，点击加入购物车，会通过产品id在指定对象中取值，此值由于v-model导致时响应式的
+
+补充：watch、computed与生命周期的缠绵关系
+    1.beforeCreate周期内给data内响应式数据赋值没用，在beforeCreate后created前此期间会按照data内定义的赋值
+    2.created周期由于data内数据初始化完成，可以修改值，修改后会在mounted结束后，先触发watch、再触发computed
+    3.watch加上属性immediate，会在初始化watch监听的时候就触发依次（在data中声明后赋值时会触发）
+      created函数之前会进行数据观测以及监听器的加载，此时设置，监听器会立刻执行，之后在执行created
+    4.computed内声明的计算属性在beforeCreate前挂载到组件实例上
+      在created前，由于data内响应式数据已经挂载到组件实例上了，computed挂载到组件上的变量也就有值了
+
+4.SPA的缺点有哪些，如何解决？
+    缺点：
+        不利于SEO
+        首屏渲染时间
+    解决方式：
+        预渲染
+        SSR
+
+5.对于动态内容，如果不适用SSR，如何做SEO？
+    使用无头浏览器（phantomjs、headlessChrome）
+    搜索引擎爬取和用户使用是由于区别的，通过代码可以发现，若为搜索引擎，使用无头浏览器渲染出页面后返给它

@@ -1,0 +1,16 @@
+
+使用脚手架创建工程
+npm install -g @vue/cli (安装3.0版本脚手架，已安装可忽略此步骤)
+vue create vuex-demo1 （创建工程）
+cd vuex-demo1 （进入工程目录）
+npm install vuex （安装vuex包）
+npm run serve （启动工程）
+
+报错：
+    无法加载文件 D:\nodejs\node_global\webpack.ps1，
+解决方法：
+（1）以管理员身份运行vs code
+（2）在终端执行：get-ExecutionPolicy，显示Restricted（表示状态是禁止的）
+（3）在终端执行：set-ExecutionPolicy RemoteSigned
+（4）在终端执行：get-ExecutionPolicy，显示RemoteSigned
+此时再使用“vue init webpack 项目名称”创建项目，不会报错

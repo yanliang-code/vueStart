@@ -1,0 +1,17 @@
+
+Vetur  
+    语法高亮
+    标签补全、模板生成
+    Lint检查
+    格式化
+ESLint（.eslintrc.js文件内配置）
+    代码规范
+    错误检查
+Prettier（.prettierrc.js文件内配置）
+    代码格式
+Vue DevTools
+    集成Vuex
+    可远程调试
+    性能分析
+
+注意：可以在上面指定的js文件上规定，也可以再packege.json中设置
