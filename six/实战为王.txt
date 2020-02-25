@@ -1,3 +1,11 @@
 
-自定义模式使用脚手架生成项目
-下载依赖的组件库 npm i ant-design-vue moment
+一、自定义模式使用脚手架生成项目
+    vue create 项目名
+    自定义（不选择default）
+    下载依赖的组件库 npm i ant-design-vue moment
+
+二、自定义webpack和babel
+
+    按需加载依赖包
+        npm i --save-dev babel-plugin-import
+        通过名字自动匹配路径与css，进行导入

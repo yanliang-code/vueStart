@@ -6,6 +6,32 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/user",
+    // 占位符 ？？？
+    component: () =>
+      import(/* webpackChunkName: "layout" */ "../layouts/UserLayout.vue"),
+    children: [
+      {
+        //   进入user路径默认登录页
+          path: '/user',
+          redirect: '/user/login'
+      },
+      {
+        path: "/user/login",
+        name: "login",
+        // 子路由的会将对应的组件渲染到父路由内
+        component: () =>
+          import(/* webpackChunkName: "user" */ "../views/User/Login.vue")
+      },
+      {
+        path: "/user/register",
+        name: "register",
+        component: () =>
+          import(/* webpackChunkName: "user" */ "../views/User/Register.vue")
+      }
+    ]
+  },
+  {
     path: "/",
     name: "Home",
     component: Home
